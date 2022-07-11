@@ -11,6 +11,17 @@ class QuestionInlineFormSet(forms.BaseInlineFormSet):
                 f'до {self.instance.QUESTION_MAX_LIMIT}'
             )
 
+        order_num_start = 1
+        for form in self.forms:
+            if form.instance.order_num == order_num_start:
+                order_num_start += 1
+            else:
+                raise ValidationError('Неправильный порядок вопросов')
+
+        for form in self.forms:
+            if form.instance.order_num > self.instance.QUESTION_MAX_LIMIT:
+                raise ValidationError(f'Максимально возможный порядковый номер: {self.instance.QUESTION_MAX_LIMIT}')
+
 
 class ChoiceInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
