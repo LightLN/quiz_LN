@@ -152,4 +152,15 @@ class ExamResultUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class ExamResultDeleteView(LoginRequiredMixin, DeleteView):
-    pass
+    model = Result
+    pk_url_kwarg = 'uuid'
+    template_name = 'results/delete.html'
+    context_object_name = 'result'
+
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get('res_uuid')
+
+        return self.get_queryset().get(uuid=uuid)
+
+    def get_success_url(self):
+        return reverse('quiz:details', kwargs={'uuid': self.object.exam.uuid})

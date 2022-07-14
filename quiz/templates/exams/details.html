@@ -58,6 +58,7 @@
                     <th>Дата старта</th>
                     <th>Баллы</th>
                     <th>Статус</th>
+                    <th>Время</th>
                     <th>Действие</th>
                 </tr>
                 {% for result in result_list %}
@@ -66,12 +67,13 @@
                     <td>{{ result.create_timestamp }}</td>
                     <td>{{ result.points }}</td>
                     <td>{{ result.get_state_display }}</td>
+                    <td>{{ result.time }}</td>
                     <td>
                         {% if result.state == result.STATE.NEW %}
                             <a class="btn btn-warning" href="{% url 'quiz:result_update' exam.uuid result.uuid %}">
                                 Продолжить
                             </a>
-                            <a class="btn btn-danger" href="#">
+                            <a class="btn btn-danger" href="{% url 'quiz:result_delete' exam.uuid result.uuid %}">
                                 Удалить
                             </a>
                         {% else %}

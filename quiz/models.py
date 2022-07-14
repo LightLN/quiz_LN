@@ -92,3 +92,9 @@ class Result(BaseModel):
             self.state = self.STATE.FINISHED
 
         self.save()
+
+    def points(self):
+        return max(0, self.num_correct_answers - self.num_incorrect_answers)
+
+    def time(self):
+        return self.update_timestamp.replace(microsecond=0) - self.create_timestamp.replace(microsecond=0)
