@@ -89,7 +89,10 @@ class ExamResultQuestionView(LoginRequiredMixin, UpdateView):
         )
         choices = ChoicesFormSet(data=request.POST)
         selected_choices = ['is_selected' in form.changed_data for form in choices.forms]
-        result.update_result(result.current_order_number + 1, question, selected_choices)
+        if sum(selected_choices) == 1:
+            result.update_result(result.current_order_number + 1, question, selected_choices)
+        else:
+            raise ValueError('Выберите ОДИН вариант ответа ;)')
 
         if result.state == Result.STATE.FINISHED:
             return HttpResponseRedirect(
