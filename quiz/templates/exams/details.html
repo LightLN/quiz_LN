@@ -64,7 +64,7 @@
                 {% for result in object_list %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ result.create_timestamp }}</td>
+                    <td>{{ result.create_timestamp|date:'d-m-Y H:i' }}</td>
                     <td>{{ result.points }}</td>
                     <td>{{ result.get_state_display }}</td>
                     <td>{{ result.time }}</td>
