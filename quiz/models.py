@@ -77,3 +77,24 @@ class Result(BaseModel):
     class Meta:
         verbose_name = 'Result'
         verbose_name_plural = 'Results'
+
+    def update_result(self, order_number, question, selected_choices):
+        correct_choice = [choice.is_correct for choice in question.choices.all()]
+        correct_answer = True
+        for k in zip(selected_choices, correct_choice):
+            correct_answer &= (k[0] == k[1])
+
+        self.num_correct_answers += int(correct_answer)
+        self.num_incorrect_answers += 1 - int(correct_answer)
+        self.current_order_number = order_number
+
+        if order_number == question.exam.questions.count():
+            self.state = self.STATE.FINISHED
+
+        self.save()
+
+    def points(self):
+        return max(0, self.num_correct_answers - self.num_incorrect_answers)
+
+    def time(self):
+        return self.update_timestamp.replace(microsecond=0) - self.create_timestamp.replace(microsecond=0)
